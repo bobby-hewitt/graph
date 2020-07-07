@@ -12,9 +12,9 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "apollo-server": "^2.15.1",
-    "apollo-server-lambda": "^2.15.1",
-    "neo4j-driver": "^4.1.0",
+    "apollo-server": "^2.13.1",
+    "apollo-server-lambda": "^2.13.1",
+    "neo4j-driver": "^4.0.2",
     "neo4j-graphql-js": "^2.14.3"
   },
   "devDependencies": {

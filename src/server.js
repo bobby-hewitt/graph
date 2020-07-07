@@ -5,6 +5,7 @@ const { makeAugmentedSchema } = require('neo4j-graphql-js')
 const neo4j = require('neo4j-driver')
 const dotenv = require('dotenv')
 dotenv.config()
+
 const typeDefs = gql`
 type Topic {
 	topicId: ID!
@@ -102,20 +103,24 @@ type Person_Position_On @relation(name: "PERSON_POSITION_ON") {
 }
 `;
 
-var driver = neo4j.driver(process.env.NEO4J_URI, neo4j.auth.basic(process.env.NEO4J_USER, process.env.NEO4J_PASSWORD), {encrypted: 'ENCRYPTION_ON'});
+var driver = neo4j.driver("bolt://hobby-pmphejdnhppggbkeemkaoeel.dbs.graphenedb.com:24787", neo4j.auth.basic(process.env.NEO4J_USER, process.env.NEO4J_PASSWORD), {encrypted: 'ENCRYPTION_ON'});
 
+
+
+const schema = makeAugmentedSchema({ typeDefs })
+console.log(schema)
 function createLambdaServer () {
   return new ApolloServerLambda({
-	  schema: makeAugmentedSchema({ typeDefs }),
-	  context: { driver, neo4jDatabase: process.env.NEO4J_DATABASE },
+	  schema,
+	  context: { driver },
 	})
 }
 
 function createLocalServer () {
-
+console.log('hitting it')
   return new ApolloServer({
-    schema: makeAugmentedSchema({ typeDefs }),
-	context: { driver, neo4jDatabase: process.env.NEO4J_DATABASE },
+    schema,
+	context: { driver },
     introspection: true,
     playground: true,
   });
