@@ -15,7 +15,8 @@
     "apollo-server": "^2.13.1",
     "apollo-server-lambda": "^2.13.1",
     "neo4j-driver": "4.0.2",
-    "neo4j-graphql-js": "^2.14.2"
+    "neo4j-graphql-js": "^2.14.2",
+    "twitter": "^1.7.1"
   },
   "devDependencies": {
     "cpx": "^1.5.0",

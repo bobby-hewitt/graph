@@ -62,6 +62,7 @@ type Person {
 	opponentOf: [Topic]
 	votedFor:[Vote]
 	votedAgainst:[Vote]
+	tweets:
 }
 
 type Party {

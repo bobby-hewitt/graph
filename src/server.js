@@ -1,10 +1,14 @@
 const ApolloServer = require('apollo-server').ApolloServer
 const ApolloServerLambda = require('apollo-server-lambda').ApolloServer
 const { gql } = require('apollo-server-lambda');
+
 const { makeAugmentedSchema } = require('neo4j-graphql-js')
 const neo4j = require('neo4j-driver')
 const dotenv = require('dotenv')
 dotenv.config()
+const resolvers = require('./resolvers')
+
+
 
 const typeDefs = gql`
 type Topic {
@@ -53,6 +57,10 @@ type Quote {
 	date: Date
 }
 
+type Tweet {
+	text: String
+}
+
 type Person {
 	personId:ID!
 	name: String
@@ -65,6 +73,7 @@ type Person {
 	opponentOf: [Topic]
 	votedFor:[Vote]
 	votedAgainst:[Vote]
+	tweets:String
 }
 
 type Party {
@@ -78,6 +87,9 @@ type Party {
 	votedFor:[Vote]
 	votedAgainst:[Vote]
 }
+
+
+
 
 type Vote {
 	voteId:ID!
@@ -103,21 +115,26 @@ type Person_Position_On @relation(name: "PERSON_POSITION_ON") {
 }
 `;
 
+
 var driver = neo4j.driver("bolt://hobby-pmphejdnhppggbkeemkaoeel.dbs.graphenedb.com:24787", neo4j.auth.basic(process.env.NEO4J_USER, process.env.NEO4J_PASSWORD), {encrypted: 'ENCRYPTION_ON'});
 
 
+const schema = makeAugmentedSchema({ typeDefs, resolvers })
 
-const schema = makeAugmentedSchema({ typeDefs })
-console.log(schema)
 function createLambdaServer () {
   return new ApolloServerLambda({
 	  schema,
 	  context: { driver },
-	})
+	  formatError: (err) => {
+    // Don't give the specific errors to the client.
+    	
+    }
+  })
+	
 }
 
 function createLocalServer () {
-console.log('hitting it')
+
   return new ApolloServer({
     schema,
 	context: { driver },
