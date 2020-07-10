@@ -28,6 +28,7 @@ type Topic {
 type Department {
 	departmentId: ID!
 	name: String
+	imageUrl: String,
 	people:[Person]@relation(name: "HOLDS_OFFICE", direction:"IN")
 	topics: [Topic]
 	votes: [Vote]
@@ -46,6 +47,11 @@ type Article {
 	author: String 
 	copy: String
 	url: String
+}
+
+type PolicyArea {
+	policyAreaId: ID!
+	name: String
 }
 
 type Quote {
@@ -73,6 +79,8 @@ type Person {
 	opponentOf: [Topic]
 	votedFor:[Vote]
 	votedAgainst:[Vote]
+	constituency:String,
+
 	tweets:String
 }
 
@@ -116,7 +124,7 @@ type Person_Position_On @relation(name: "PERSON_POSITION_ON") {
 `;
 
 
-var driver = neo4j.driver("bolt://hobby-pmphejdnhppggbkeemkaoeel.dbs.graphenedb.com:24787", neo4j.auth.basic(process.env.NEO4J_USER, process.env.NEO4J_PASSWORD), {encrypted: 'ENCRYPTION_ON'});
+var driver = neo4j.driver(process.env.NEO4J_URI, neo4j.auth.basic(process.env.NEO4J_USER, process.env.NEO4J_PASSWORD), {encrypted: 'ENCRYPTION_ON'});
 
 
 const schema = makeAugmentedSchema({ typeDefs, resolvers })
