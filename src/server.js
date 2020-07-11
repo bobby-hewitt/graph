@@ -34,10 +34,9 @@ type Department {
 	votes: [Vote]
 }
 
-type IssueTag {
+type Issue {
+	issueId: ID!
 	name: String,
-	topics:[Topic]
-	votes:[Vote]
 }
 
 type Article {
