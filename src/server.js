@@ -11,18 +11,15 @@ const resolvers = require('./resolvers')
 
 
 const typeDefs = gql`
-type Topic {
-	topicId: ID!
-	title: String
-	description: String
-	image: String
-	articles: [Article]
-	quotes:[Quote]
-	supporters:[Person]
-	partySupporters:[Party]
-	opponents:[Person]
-	partyOpponents:[Party]
-	relatedVotes:[Vote]
+type Article {
+	ArticleId:ID!
+	image: String,
+    title: String,
+    policyAreas:[PolicyArea],
+    issues:[Issue],
+    description: String,
+    reactions: Boolean,
+    voteId: String,
 }
 
 type Department {
@@ -30,7 +27,7 @@ type Department {
 	name: String
 	imageUrl: String,
 	people:[Person]@relation(name: "HOLDS_OFFICE", direction:"IN")
-	topics: [Topic]
+	articles: [Article]
 	votes: [Vote]
 }
 
@@ -57,7 +54,6 @@ type Quote {
 	quoteId: ID!
 	author: Person
 	quote: String
-	topic: [Topic]
 	vote:[Vote]
 	date: Date
 }
@@ -74,8 +70,8 @@ type Person {
 	party:Party @relation(name: "MEMBER_OF", direction: "OUT")
 	departments:[Department] @relation(name: "HOLDS_OFFICE", direction:"OUT")
 	jobTitle: String
-	supporterOf: [Topic]
-	opponentOf: [Topic]
+	supporterOf: [Article]
+	opponentOf: [Article]
 	votedFor:[Vote]
 	votedAgainst:[Vote]
 	constituency:String,
@@ -89,8 +85,8 @@ type Party {
 	color: String
 	logo: String
 	members:[Person]@relation(name: "MEMBER_OF", direction: "IN")
-	supporterOf: [Topic]
-	opponentOf: [Topic]
+	supporterOf: [Article]
+	opponentOf: [Article]
 	votedFor:[Vote]
 	votedAgainst:[Vote]
 }
@@ -105,7 +101,7 @@ type Vote {
 
 type Party_Vote_On @relation(name: "PARTY_POSITION_ON") {
   from: Person
-  to: Topic
+  to: Article
   position: String
   articles: [Article]
   quotes: [Quote]
@@ -115,7 +111,7 @@ type Party_Vote_On @relation(name: "PARTY_POSITION_ON") {
 
 type Person_Position_On @relation(name: "PERSON_POSITION_ON") {
   from: Person
-  to: Topic
+  to: Article
   position: String
   articles: [Article]
   quotes: [Quote]
