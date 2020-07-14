@@ -12,20 +12,23 @@ const resolvers = require('./resolvers')
 
 const typeDefs = gql`
 type Article {
-	ArticleId:ID!
-	image: String,
-    title: String,
-    policyAreas:[PolicyArea],
-    issues:[Issue],
-    description: String,
-    reactions: Boolean,
-    voteId: String,
+	cardType: String
+	type: String
+	articleId:ID!
+	lastEdited: Float
+	image: String
+    title: String
+    policyAreas:[String]
+    issues:[String]
+    description: String
+    reactions: Boolean
+    voteId: String
 }
 
 type Department {
 	departmentId: ID!
 	name: String
-	imageUrl: String,
+	imageUrl: String
 	people:[Person]@relation(name: "HOLDS_OFFICE", direction:"IN")
 	articles: [Article]
 	votes: [Vote]
@@ -34,15 +37,6 @@ type Department {
 type Issue {
 	issueId: ID!
 	name: String,
-}
-
-type Article {
-	articleId: ID!
-	title: String
-	image: String
-	author: String 
-	copy: String
-	url: String
 }
 
 type PolicyArea {
@@ -130,14 +124,12 @@ function createLambdaServer () {
 	  context: { driver },
 	  formatError: (err) => {
     // Don't give the specific errors to the client.
-    	
     }
   })
 	
 }
 
 function createLocalServer () {
-
   return new ApolloServer({
     schema,
 	context: { driver },
