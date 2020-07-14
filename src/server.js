@@ -12,9 +12,10 @@ const resolvers = require('./resolvers')
 
 const typeDefs = gql`
 type Article {
-	cardType: String
-	type: String
 	articleId:ID!
+	cardType: String
+	subtitle:String
+	type: String
 	lastEdited: Float
 	image: String
     title: String
